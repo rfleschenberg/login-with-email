@@ -19,7 +19,8 @@ class UserAdminForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=commit)
         user.set_password(self.cleaned_data['password'])
-        user.save()
+        if commit:
+            user.save()
         return user
 
 
