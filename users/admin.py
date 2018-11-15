@@ -6,6 +6,8 @@ from .models import User
 
 class UserAdminForm(forms.ModelForm):
 
+    password = forms.CharField(required=False, widget=forms.PasswordInput())
+
     class Meta:
         model = User
         fields = ['email', 'password', 'is_staff', 'is_superuser',
@@ -13,6 +15,12 @@ class UserAdminForm(forms.ModelForm):
         widgets = {
             'password': forms.PasswordInput(),
         }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        user.save()
+        return user
 
 
 class UserAdmin(admin.ModelAdmin):
